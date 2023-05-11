@@ -11,8 +11,10 @@
   "dependencies": {
     "@types/node": "^18.16.0",
     "axios": "^1.4.0",
+    "events": "^3.3.0",
     "express": "^4.18.2",
     "minimist": "^1.2.8",
+    "os": "^0.1.2",
     "progress": "^2.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
