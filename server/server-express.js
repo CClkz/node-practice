@@ -12,15 +12,6 @@ app.use(express.json())
 app.post('/todos', (req, res) => {
   console.log('body', req.body)
 
-  let data = ''
-  req.on('data', chunk => {
-    console.log('data', chunk)
-    data += chunk
-  })
-  req.on('end', () => {
-    console.log('end', data)
-  })
-
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
   res.end('api post response')
@@ -28,15 +19,6 @@ app.post('/todos', (req, res) => {
 
 app.get('/todos', (req, res) => {
   console.log('query', req.query)
-
-  let data = ''
-  req.on('data', chunk => {
-    console.log('data', chunk)
-    data += chunk
-  })
-  req.on('end', () => {
-    console.log('end', data)
-  })
 
   res.statusCode = 200
   res.setHeader('Content-Type', 'text/plain')
