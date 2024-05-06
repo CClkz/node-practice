@@ -21,6 +21,8 @@ const req = http.request(options, res => {
   console.log(`状态码: ${res.statusCode}`)
 
   res.on('data', d => {
+    // 这里d是buff，'' + d 转成正常数据
+    console.log('我是log', '' + d)
     process.stdout.write(d)
   })
 })

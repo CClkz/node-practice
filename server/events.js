@@ -4,11 +4,17 @@ const Event = new EventEmitter()
 const sleepHandler = () => {
   console.log('enter sleep')
 }
+
+const sleepHandlerPre = () => {
+  console.log('enter sleep pre')
+}
+
 Event.on('sleep', sleepHandler)
 Event.once('sleep', sleepHandler)
 // unshift，监听器列表头部加入
-Event.prependListener('sleep', sleepHandler)
-Event.prependOnceListener('sleep', sleepHandler)
+// sleep监听添加了两个回调函数，prependListener添加的先触发
+Event.prependListener('sleep', sleepHandlerPre)
+Event.prependOnceListener('sleep', sleepHandlerPre)
 
 Event.emit('sleep')
 

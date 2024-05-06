@@ -28,6 +28,8 @@ console.log('buf1', buf1, buf1.length, buf1[0], buf1[1], buf1[2], buf1[3])
 console.log('buf1 string', buf1.toString())
 buf1.write('a')
 console.log('buf1 string', buf1.toString()) // a
+buf1.write('b')
+console.log('buf1 string', buf1.toString()) // b
 buf1.write('bcdef')
 console.log('buf1 string', buf1.toString()) // bcde
 let bufCopy = Buffer.alloc(4)
