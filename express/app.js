@@ -17,6 +17,7 @@ const usersRouter = require('./routes/users')
 app.use(function (req, res, next) {
   console.log('before 路由')
   next()
+  console.log('after next');
 })
 
 // 使用中间件将路由模块挂载到应用

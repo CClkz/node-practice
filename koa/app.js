@@ -22,9 +22,26 @@ function startApp(port) {
     })
 }
 
-// 响应
+/**
+ * next 调用下一个中间件，next()返回promise，
+ * 区别：express next()是普通函数，也不可用next().then()
+ */
+app.use(async (ctx, next) => {
+  const start = Date.now()
+  await next()
+  const ms = Date.now() - start
+  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+})
+
 app.use(ctx => {
-  ctx.body = 'Hello Koa'
+  // Promise.resolve().then(() => {
+  //   console.log('set body')
+  //   ctx.body = 'Hello Koa'
+  // })
+  setTimeout(() => {
+    console.log('set body')
+    ctx.body = 'Hello Koa'
+  }, 3000)
 })
 
 // 启动应用
