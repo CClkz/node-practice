@@ -1,8 +1,11 @@
 // app.js
 const express = require('express')
-const path = require('path')
 const app = express()
 const port = 3000
+
+// 引入静态文件中间件配置
+const configureStaticFiles = require('./config/static')
+configureStaticFiles(app)
 
 // 引入路由模块
 const indexRouter = require('./routes/index')
@@ -15,9 +18,6 @@ app.use(function (req, res, next) {
   console.log('before 路由')
   next()
 })
-
-// 静态文件
-app.use('/static', express.static(path.join(__dirname, 'assets')))
 
 // 使用中间件将路由模块挂载到应用
 app.use('/', indexRouter)
