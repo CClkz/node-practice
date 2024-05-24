@@ -1,5 +1,6 @@
 const Koa = require('koa')
 const app = new Koa()
+const { setBodyMw } = require('./middleware')
 
 // 启动函数
 function startApp(port) {
@@ -33,16 +34,8 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-app.use(ctx => {
-  // Promise.resolve().then(() => {
-  //   console.log('set body')
-  //   ctx.body = 'Hello Koa'
-  // })
-  setTimeout(() => {
-    console.log('set body')
-    ctx.body = 'Hello Koa'
-  }, 3000)
-})
+app.use(setBodyMw)
+
 
 // 启动应用
 startApp(3000)
