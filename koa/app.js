@@ -1,6 +1,7 @@
 const Koa = require('koa')
-const app = new Koa()
 const { setBodyMw } = require('./middleware')
+
+const app = new Koa()
 
 // 启动函数
 function startApp(port) {

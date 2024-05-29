@@ -18,6 +18,7 @@ async function middleware(ctx, next) {
  * @param {*} ctx 
  */
 async function setBodyMw(ctx) {
+  console.log('set body');
   ctx.body = 'Hello Koa1'
 }
 
