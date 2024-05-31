@@ -1,6 +1,4 @@
 const Koa = require('koa')
-const { setBodyMw } = require('./middleware')
-
 const app = new Koa()
 
 // 设置秘钥,数组
@@ -10,6 +8,7 @@ app.keys = ['secret']
 app.context.testadd = 'test'
 
 // logger
+
 app.use(async (ctx, next) => {
   console.log('ctx testadd', ctx.testadd)
   await next()
@@ -36,42 +35,16 @@ app.use(async (ctx, next) => {
   await next()
 })
 
-// response,抢先一步，让下面的响应体中间件无处可用
-app.use(async (ctx, next) => {
+// response
+
+app.use(async ctx => {
   // 先设置body，再setHeader X-Response-Time,Header生效了，为什么？
   // 因为响应头的发送在全部中间件执行完成后，那响应头和响应体的发送顺序呢，体一定在头之后？
   // 是的，几乎同时，但一定是先头后体，就是网络请求它不是一发一收的过程，浏览器看到的网络记录是结合后的结果
-  await next() // next里也包含ctx.body，和下一行先后顺序影响结果
   ctx.body = 'Hello World'
 })
 
-app.use(setBodyMw)
-
-// 启动函数
-function startApp(port) {
-  // 尝试启动应用
-  app
-    .listen(port, () => {
-      console.log(`Server is running on port ${port}`)
-    })
-    .on('error', err => {
-      // 如果端口被占用
-      if (err.code === 'EADDRINUSE') {
-        console.log(`Port ${port} is already in use`)
-        // 尝试增加端口号并重新启动应用
-        startApp(port + 1)
-      } else {
-        // 其他错误，直接退出程序
-        console.error('Server error:', err)
-        process.exit(1)
-      }
-    })
-}
-
-// 启动应用
-startApp(3000)
-
-// app.listen(3000)
+app.listen(3000)
 // 等同于
 // http.createServer(app.callback()).listen(3000);
 // http.createServer(app.callback()).listen(3001); // 可将服务加到多个端口

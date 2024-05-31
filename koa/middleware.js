@@ -15,11 +15,34 @@ async function middleware(ctx, next) {
 
 /**
  * 设置body内容
- * @param {*} ctx 
+ * @param {*} ctx
  */
 async function setBodyMw(ctx) {
-  console.log('set body');
+  console.log('set body')
   ctx.body = 'Hello Koa1'
+}
+
+/**
+ * 打印用时
+ * @param {*} ctx
+ * @param {*} next
+ */
+async function logTime(ctx, next) {
+  await next()
+  const rt = ctx.response.get('X-Response-Time')
+  console.log(`${ctx.method} ${ctx.url} - ${rt}`)
+}
+
+/**
+ * 设置用时
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+async function setTime(ctx, next) {
+  const start = Date.now()
+  await next()
+  const ms = Date.now() - start
+  ctx.set('X-Response-Time', `${ms}ms`)
 }
 
 module.exports = { setBodyMw }

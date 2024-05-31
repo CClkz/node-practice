@@ -17,6 +17,7 @@ const usersRouter = require('./routes/users')
 app.use(function (req, res, next) {
   console.log('中间件1')
   next()
+  console.log('中间件1end')
 })
 app.use(function (req, res, next) {
   console.log('中间件2')
