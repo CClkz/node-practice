@@ -1,5 +1,9 @@
 const Koa = require('koa')
-const { setBodyMw } = require('./middleware')
+const bodyParser = require('koa-bodyparser')
+const { setBodyMw, logTime, setTime, setCookies } = require('./middleware')
+
+// 引入路由
+const userRouter = require('./routers/user')
 
 const app = new Koa()
 
@@ -9,40 +13,28 @@ app.keys = ['secret']
 // 给ctx添加属性
 app.context.testadd = 'test'
 
+// 使用 koa-bodyparser 中间件来解析请求体
+app.use(bodyParser())
+
 // logger
-app.use(async (ctx, next) => {
-  console.log('ctx testadd', ctx.testadd)
-  await next()
-  const rt = ctx.response.get('X-Response-Time')
-  console.log(`${ctx.method} ${ctx.url} - ${rt}`)
-})
+app.use(logTime)
 
 // x-response-time
-app.use(async (ctx, next) => {
-  const start = Date.now()
-  await next()
-  const ms = Date.now() - start
-  ctx.set('X-Response-Time', `${ms}ms`)
-})
+app.use(setTime)
 
 // cookie
-app.use(async (ctx, next) => {
-  ctx.cookies.set('auth', 'admin')
-  // 设置秘钥产生了name和name.sig两个cookie
-  // 要只set加密后的，得自己处理加密信息再set
-  ctx.cookies.set('name', 'tobi', { signed: true })
-  // 读取有签名的cookie
-  // const name = ctx.cookies.get('name', { signed: true })
-  await next()
-})
+app.use(setCookies)
+
+// allowedMethods中间件，path对应但method不匹配的时候制动设置响应头'Allow: GET, POST'，并返回'405 Method Not Allowed'
+app.use(userRouter.routes()).use(userRouter.allowedMethods())
 
 // response,抢先一步，让下面的响应体中间件无处可用
 app.use(async (ctx, next) => {
   // 先设置body，再setHeader X-Response-Time,Header生效了，为什么？
   // 因为响应头的发送在全部中间件执行完成后，那响应头和响应体的发送顺序呢，体一定在头之后？
   // 是的，几乎同时，但一定是先头后体，就是网络请求它不是一发一收的过程，浏览器看到的网络记录是结合后的结果
-  await next() // next里也包含ctx.body，和下一行先后顺序影响结果
   ctx.body = 'Hello World'
+  await next() // next里也包含ctx.body，和下一行先后顺序影响结果
 })
 
 app.use(setBodyMw)

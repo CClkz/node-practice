@@ -35,8 +35,8 @@ async function logTime(ctx, next) {
 
 /**
  * 设置用时
- * @param {*} ctx 
- * @param {*} next 
+ * @param {*} ctx
+ * @param {*} next
  */
 async function setTime(ctx, next) {
   const start = Date.now()
@@ -45,4 +45,38 @@ async function setTime(ctx, next) {
   ctx.set('X-Response-Time', `${ms}ms`)
 }
 
-module.exports = { setBodyMw }
+/**
+ * 设置cookie
+ * @param {*} ctx
+ * @param {*} next
+ */
+async function setCookies(ctx, next) {
+  const option = {} // 很丰富的cookie配置
+  ctx.cookies.set('auth', 'admin', option)
+  // 设置秘钥产生了name和name.sig两个cookie
+  // 要只set加密后的，得自己处理加密信息再set
+  ctx.cookies.set('name', 'tobi', { signed: true })
+  // 读取有签名的cookie
+  // const name = ctx.cookies.get('name', { signed: true })
+  await next()
+}
+
+module.exports = { setBodyMw, logTime, setTime, setCookies }
+
+// ctx.req  node http模块request对象
+// ctx.res  node http模块response对象
+// ctx.request koa的request对象
+  // 封装了一层，提供一些更方便的api,例如获取参数
+  // req需要自己解析url，request处理好了，ctx.request.query获取就好
+// ctx.response koa的response对象
+// ctx.request和ctx.response还提供了一些别名,结构更简洁
+  // 例如ctx.body就等效于ctx.response.body
+// ctx.respond ctx.respond=false绕过 ctx.response处理，使用ctx.res，koa不支持这个功能，什么意思呢？
+// ctx.throw([status], [msg], [properties]) 抛出错误，默认status 500
+  // ctx.throw(400, 'name required') 等效
+  // const err = new Error('name required');
+  // err.status = 400;
+  // err.expose = true;
+  // throw err;
+
+
