@@ -14,6 +14,23 @@ async function middleware(ctx, next) {
 }
 
 /**
+ * 自定义的错误处理中间件，默认就有错误处理程序，其实就是中间链开始时添加一个try-catch中间件
+ * @param {*} ctx 
+ * @param {*} next 
+ */
+async function handleError(ctx, next) {
+  try {
+    await next()
+  } catch (err) {
+    // will only respond with JSON
+    ctx.status = err.statusCode || err.status || 500
+    ctx.body = {
+      message: err.message
+    }
+  }
+}
+
+/**
  * 设置body内容
  * @param {*} ctx
  */
@@ -66,17 +83,15 @@ module.exports = { setBodyMw, logTime, setTime, setCookies }
 // ctx.req  node http模块request对象
 // ctx.res  node http模块response对象
 // ctx.request koa的request对象
-  // 封装了一层，提供一些更方便的api,例如获取参数
-  // req需要自己解析url，request处理好了，ctx.request.query获取就好
+// 封装了一层，提供一些更方便的api,例如获取参数
+// req需要自己解析url，request处理好了，ctx.request.query获取就好
 // ctx.response koa的response对象
 // ctx.request和ctx.response还提供了一些别名,结构更简洁
-  // 例如ctx.body就等效于ctx.response.body
+// 例如ctx.body就等效于ctx.response.body
 // ctx.respond ctx.respond=false绕过 ctx.response处理，使用ctx.res，koa不支持这个功能，什么意思呢？
 // ctx.throw([status], [msg], [properties]) 抛出错误，默认status 500
-  // ctx.throw(400, 'name required') 等效
-  // const err = new Error('name required');
-  // err.status = 400;
-  // err.expose = true;
-  // throw err;
-
-
+// ctx.throw(400, 'name required') 等效
+// const err = new Error('name required');
+// err.status = 400;
+// err.expose = true;
+// throw err;

@@ -39,6 +39,11 @@ app.use(async (ctx, next) => {
 
 app.use(setBodyMw)
 
+// 错误被捕获处理了，后续没throw，不会传递给错误侦听器
+app.onerror(err => {
+  console.error('onerror', err)
+})
+
 // 启动函数
 function startApp(port) {
   // 尝试启动应用
