@@ -25,10 +25,10 @@ app.use(setTime)
 // cookie
 app.use(setCookies)
 
-// allowedMethods中间件，path对应但method不匹配的时候制动设置响应头'Allow: GET, POST'，并返回'405 Method Not Allowed'
+// // allowedMethods中间件，path对应但method不匹配的时候制动设置响应头'Allow: GET, POST'，并返回'405 Method Not Allowed'
 app.use(userRouter.routes()).use(userRouter.allowedMethods())
 
-// response,抢先一步，让下面的响应体中间件无处可用
+// // response,抢先一步，让下面的响应体中间件无处可用
 app.use(async (ctx, next) => {
   // 先设置body，再setHeader X-Response-Time,Header生效了，为什么？
   // 因为响应头的发送在全部中间件执行完成后，那响应头和响应体的发送顺序呢，体一定在头之后？
@@ -39,9 +39,10 @@ app.use(async (ctx, next) => {
 
 app.use(setBodyMw)
 
-// 错误被捕获处理了，后续没throw，不会传递给错误侦听器
-app.onerror(err => {
-  console.error('onerror', err)
+// 错误被捕获处理了，后续没throw，就不会传递给错误侦听器
+// req、res过程的错误，也会存在ctx
+app.on('error', (err, ctx) => {
+  console.error('error', err)
 })
 
 // 启动函数
