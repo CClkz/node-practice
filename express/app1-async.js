@@ -7,16 +7,16 @@ app.use((req, res, next) => {
   console.log('First middleware after next()')
 })
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   console.log('Second middleware before next()')
-  next() // 调用下一个中间件
+  await next() // 调用下一个中间件
   console.log('Second middleware after next()')
 })
 
-app.use((req, res) => {
-  console.log('Third middleware')
-  //   res.send('Hello, Express!')
-})
+// app.use((req, res) => {
+//   console.log('Third middleware')
+//   //   res.send('Hello, Express!')
+// })
 
 app.use('/hello', (req, res) => {
   res.send('Hello, hello!')
@@ -51,6 +51,7 @@ app.get('/async', async (req, res) => {
         resolve('Hello, async !')
       }, 2000)
     })
+    console.log('send')
     res.send(result)
   } catch (err) {}
 })
@@ -65,11 +66,10 @@ app.listen(3000, () => {
 // 3. 错误处理，koa try(await next())catch(){}捕获，express next(err)在后续错误中间件捕获
 // 4. express内置了一些功能，koa更简洁
 
-// express处理一步的几种方式
+// express处理异步的几种方式
 // 1. 回调，君记得回调地狱否
 // 2. promise
 // 3. async await
-
 
 // express内置的功能
 // 1. 路由，koa app.use('/user',) app.get('/user',)就会报错

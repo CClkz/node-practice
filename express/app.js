@@ -19,9 +19,11 @@ app.use(function (req, res, next) {
   next()
   console.log('中间件1end')
 })
-app.use(function (req, res, next) {
+
+// express app.use不支持async await中间件
+app.use(async function (req, res, next) {
   console.log('中间件2')
-  next()
+  await next()
 })
 
 // 使用中间件将路由模块挂载到应用

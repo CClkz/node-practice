@@ -22,6 +22,7 @@ app.use(async (ctx, next) => {
         resolve('Hello, 2s!')
       }, 2000)
     })
+    console.log('set body');
     ctx.body = result
   } catch (err) {}
 })
