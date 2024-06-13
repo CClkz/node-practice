@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node koa/app.js",
+    "debug": "set DEBUG=koa* && node koa/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +17,7 @@
     "express": "^4.18.2",
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
+    "koa-compose": "^4.1.0",
     "koa-router": "^12.0.1",
     "minimist": "^1.2.8",
     "os": "^0.1.2",

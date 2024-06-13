@@ -1,6 +1,7 @@
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 const { setBodyMw, logTime, setTime, setCookies } = require('./middleware')
+require('./best-middleware')
 
 // 引入路由
 const userRouter = require('./routers/user')
