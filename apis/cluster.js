@@ -35,4 +35,8 @@ if (cluster.isPrimary) {
 
 // netstat -ano | grep :8000
 // ps -p <pid> 没搜到这个主进程或子进程
-// tasklist /FI "PID eq <pid>"
+// 在 Windows 系统上使用 Git Bash 时， ps 命令提供的进程列表通常是有限的，
+// 因为它默认显示的是 Git Bash (即 MSYS2) 环境中的进程，而不是整个系统的进程。
+// tasklist | grep node"
+// powershell -Command "Get-Process -Name node | Format-List *"
+

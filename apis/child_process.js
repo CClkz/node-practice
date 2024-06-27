@@ -24,4 +24,4 @@ child.on('close', code => {
 
 // 向子进程的标准输入写数据
 child.stdin.write('console.log("Hello from parent process!");\n')
-// child.stdin.write('process.exit();\n') // 结束子进程
+child.stdin.write('process.exit();\n') // 结束子进程
